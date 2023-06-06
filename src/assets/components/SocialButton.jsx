@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 const SocialButton = ({ icon }) => {
   return (
     <>
-      <Row>
+      <Row class="border border-dark rounded-circle p-4">
         <Col xs={6} md={4}>
           {icon}
         </Col>
