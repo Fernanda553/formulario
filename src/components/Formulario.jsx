@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Alert from "./Alert";
 
 const Formulario = () => {
   const [name, setName] = useState("");
@@ -8,35 +9,50 @@ const Formulario = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [error, setError] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [messageAlert, setMessageAlert] = useState("");
+  const [variantAlert, setVariantAlert] = useState("");
+
+  function resetForm() {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+  }
 
   const AlertInput = (e) => {
     e.preventDefault();
 
     if (name == "" || email == "" || password == "" || confirmPassword == "") {
-      setError(true);
+      setMessageAlert("Todos los campos son obligatorios ❌");
+      setShowAlert(true);
+      setVariantAlert("danger");
+      return;
+    }
+    /* hacer que el email tenga formato correcto */
+    if (!email.includes("@")) {
+      setShowAlert(true);
+      setMessageAlert("El email no es válido ❌");
+      setVariantAlert("danger");
       return;
     }
 
-    setError(false);
-    setName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-
     if (password !== confirmPassword) {
-      return alert("Las contraseñas no son iguales");
+      setShowAlert(true);
+      setMessageAlert("Las contraseñas no son iguales ❌");
+      setVariantAlert("danger");
+      return;
     }
-    alert("Las contraseñas son iguales");
+    setMessageAlert("Registro realizado con éxito ✅");
+    setShowAlert(true);
+    setVariantAlert("success");
+    resetForm();
   };
 
   return (
     <>
-      <Form onSubmit={AlertInput}>
-        {error ? (
-          <p className="error">Todos los campos son obligatorios</p>
-        ) : null}
-        <div className="form-group">
+      <Form onSubmit={AlertInput} className="w-50">
+        <div className="form-group ">
           <Form.Group className="mb-3">
             <Form.Control
               type="Nombre"
@@ -63,17 +79,23 @@ const Formulario = () => {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Control
-              type="confirmPassword"
+              type="password"
               placeholder="Confirma tu contraseña"
               onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
             />
           </Form.Group>
-          <Button className="btn btn-dark mt-3" type="submit">
+
+          <Button
+            className="btn btn-success btn-block w-100 pt-1 pb-1"
+            type="submit"
+          >
             Registrarse
           </Button>
         </div>
       </Form>
+
+      {showAlert ? <Alert text={messageAlert} variant={variantAlert} /> : null}
     </>
   );
 };
