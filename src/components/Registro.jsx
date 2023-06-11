@@ -1,7 +1,8 @@
 import SocialButton from "./SocialButton.jsx";
 import Formulario from "./Formulario.jsx";
-
-const Registro = () => {
+import Alerta from "./Alerta.jsx"
+import { useState } from "react";
+const Registro = ({messages, status, setStatus }) => {
   return (
     <>
       <div className="box">
@@ -12,7 +13,8 @@ const Registro = () => {
           <SocialButton icon={"linkedin-in"} />
         </div>
         <p className="text-muted">O usa tu email para registrarte</p>
-        <Formulario />
+        <Formulario setStatus={setStatus}/>
+        <Alerta messages={messages} status={status}/>
       </div>
     </>
   );
